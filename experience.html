@@ -360,6 +360,7 @@
         <select class="form-select" id="region" name="region" required>
           <option value="" disabled selected>Select a region…</option>
           <option value="west-texas">West Texas</option>
+          <option value="civil-war">Civil War (Alabama)</option>
           <option value="ireland">Ireland</option>
           <option value="germany">Germany</option>
           <option value="scandinavia">Scandinavia</option>
@@ -417,6 +418,49 @@
       <button class="email-btn" onclick="captureEmail(event, 'emailInput1')">Send me more</button>
     </div>
     <p class="email-confirm" id="emailConfirm1">You're in. First story arrives tomorrow morning.</p>
+  </div>
+
+  <!-- Civil War Story — 6th Alabama Cavalry -->
+  <div class="thread-container" id="civilWarStory">
+    <div class="lineage-thread">
+      <div class="thread-dot dot-top"></div>
+      <div class="thread-dot dot-mid"></div>
+      <div class="thread-dot dot-bottom"></div>
+    </div>
+
+    <div class="story-section">
+      <div class="section-tag">Where they were</div>
+      <p class="story-body">Southern Alabama. May 1865.</p>
+      <p class="story-body">Your great-great-grandfather was a private in the 6th Alabama Cavalry. When the surrender terms were read aloud to the regiment, fewer than two hundred men were left standing — out of nearly a thousand who had mustered in 1863. He was one of them. He had been fighting for two years: through the Atlanta Campaign, back south to Florida, through skirmishes across central Alabama. He is handed his parole papers. He is told he may go home.</p>
+      <p class="story-place">6th Alabama Cavalry · Alabama, May 1865</p>
+    </div>
+
+    <div class="story-section">
+      <div class="section-tag">What they faced</div>
+      <p class="story-body">Home is a hundred miles north and west with no rail line running and no army left to feed him. He fought for the Confederacy — that was wrong, and history settled that. What it doesn't record is this: he is twenty-something years old, thin as wire, and the road home runs through burned bridges, collapsed fences, and fields that haven't been planted in two years.</p>
+      <p class="story-body">He walks for weeks. Blisters heal and re-open. He eats what he finds. He passes through communities where every family has lost someone, where grief sits in the air like weather. He passes through communities where the men didn't come back at all.</p>
+    </div>
+
+    <div class="story-section">
+      <div class="section-tag">How they came through it</div>
+      <p class="story-body">He comes home to a farm that is still standing. Not everyone does. He puts in a crop. It comes in. He has children. One of those children's children moves west — to Texas, to the flat country beyond the Brazos — and the line continues until it reaches you.</p>
+      <p class="story-body">The walk home was not heroic. There was no glory in it. He was a defeated man walking a broken road back to a changed world, carrying nothing but his parole papers and whatever was left of him. That is exactly what it took to keep the line going.</p>
+    </div>
+
+    <div class="strength-close">
+      <p class="strength-text">That stubbornness — putting one foot in front of the other when there is every reason to stop — runs in your line.<br>It's in you right now.</p>
+    </div>
+
+    <div class="more-label">
+      <strong>This is one story from your line. There are more.</strong><br>
+      Get a new story every morning — delivered to your inbox.
+    </div>
+
+    <div class="email-row">
+      <input class="email-input" type="email" id="emailInput3" placeholder="your@email.com" />
+      <button class="email-btn" onclick="captureEmail(event, 'emailInput3')">Send me more</button>
+    </div>
+    <p class="email-confirm" id="emailConfirm3">You're in. First story arrives tomorrow morning.</p>
   </div>
 
   <!-- Placeholder story for other regions -->
@@ -487,12 +531,17 @@
       e.preventDefault();
       const region = document.getElementById('region').value;
 
-      // Hide both story containers first
+      // Hide all story containers first
       document.getElementById('westTexasStory').classList.remove('visible');
+      document.getElementById('civilWarStory').classList.remove('visible');
       document.getElementById('placeholderStory').style.display = 'none';
 
       if (region === 'west-texas') {
         const container = document.getElementById('westTexasStory');
+        container.classList.add('visible');
+        smoothScroll(container);
+      } else if (region === 'civil-war') {
+        const container = document.getElementById('civilWarStory');
         container.classList.add('visible');
         smoothScroll(container);
       } else {
