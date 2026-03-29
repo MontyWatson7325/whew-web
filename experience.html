@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Whew — Find Your Story</title>
+  <meta name="description" content="Where did your people come from? Enter your origin and hear one story of what they endured — and how they made it through." />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #0a0a0f;
+      color: #e8e4dc;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Georgia, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 24px 100px;
+      text-align: center;
+    }
+
+    /* ─── HEADER ─── */
+    .wordmark {
+      font-size: 64px;
+      font-weight: 800;
+      letter-spacing: -3px;
+      color: #f5f0e8;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .breath {
+      font-size: 13px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #5a5248;
+      margin-bottom: 48px;
+    }
+
+    /* ─── INTRO ─── */
+    .intro-label {
+      font-size: 13px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #4a4460;
+      margin-bottom: 16px;
+    }
+
+    .intro-heading {
+      font-size: 26px;
+      font-weight: 600;
+      color: #f0ece4;
+      line-height: 1.3;
+      max-width: 480px;
+      margin-bottom: 12px;
+    }
+
+    .intro-sub {
+      font-size: 16px;
+      color: #7a7068;
+      line-height: 1.7;
+      max-width: 400px;
+      margin-bottom: 44px;
+    }
+
+    /* ─── ORIGIN FORM ─── */
+    .origin-form {
+      background: #13131c;
+      border: 1px solid #22222e;
+      border-radius: 16px;
+      padding: 32px 36px;
+      max-width: 460px;
+      width: 100%;
+      text-align: left;
+    }
+
+    .form-label {
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #4a4460;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .form-select,
+    .form-input {
+      width: 100%;
+      background: #0d0d16;
+      border: 1px solid #22222e;
+      border-radius: 10px;
+      color: #e8e4dc;
+      font-size: 16px;
+      padding: 13px 16px;
+      outline: none;
+      appearance: none;
+      -webkit-appearance: none;
+      margin-bottom: 20px;
+      transition: border-color 0.2s;
+    }
+
+    .form-select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235a5248' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; padding-right: 40px; }
+
+    .form-select option { background: #13131c; }
+
+    .form-input::placeholder { color: #3a3830; }
+
+    .form-select:focus,
+    .form-input:focus { border-color: #3a3a50; }
+
+    .select-wrap { position: relative; margin-bottom: 0; }
+
+    .form-row { margin-bottom: 20px; }
+    .form-row:last-of-type { margin-bottom: 28px; }
+
+    .submit-btn {
+      width: 100%;
+      background: #f5f0e8;
+      color: #0a0a0f;
+      border: none;
+      border-radius: 12px;
+      padding: 15px 24px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.3px;
+      transition: opacity 0.2s;
+    }
+
+    .submit-btn:hover { opacity: 0.88; }
+
+    /* ─── LINEAGE THREAD ─── */
+    .thread-container {
+      display: none;
+      position: relative;
+      max-width: 560px;
+      width: 100%;
+      margin-top: 64px;
+      padding-left: 36px;
+    }
+
+    .thread-container.visible { display: block; }
+
+    /* The thin vertical line — lineage thread */
+    .lineage-thread {
+      position: absolute;
+      left: 0;
+      top: 24px;
+      bottom: 24px;
+      width: 1px;
+      background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        #2a2438 8%,
+        #3a3050 40%,
+        #2a2438 80%,
+        transparent 100%
+      );
+    }
+
+    .thread-dot {
+      position: absolute;
+      left: -3px;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #4a4060;
+      border: 1px solid #6a5a80;
+    }
+
+    .dot-top { top: 24px; }
+    .dot-mid { top: 50%; transform: translateY(-50%); }
+    .dot-bottom { bottom: 24px; }
+
+    /* ─── STORY SECTIONS ─── */
+    .story-section {
+      background: #13131c;
+      border: 1px solid #22222e;
+      border-radius: 14px;
+      padding: 28px 32px;
+      text-align: left;
+      margin-bottom: 12px;
+    }
+
+    .section-tag {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #4a4460;
+      margin-bottom: 14px;
+    }
+
+    .story-body {
+      font-size: 16px;
+      color: #c8c4bc;
+      line-height: 1.8;
+    }
+
+    .story-body + .story-body { margin-top: 14px; }
+
+    .story-place {
+      margin-top: 16px;
+      font-size: 13px;
+      color: #4a4440;
+      font-style: italic;
+    }
+
+    /* strength close */
+    .strength-close {
+      background: #0f0f1a;
+      border: 1px solid #2a2438;
+      border-left: 3px solid #4a4060;
+      border-radius: 14px;
+      padding: 28px 32px;
+      text-align: left;
+      margin-bottom: 40px;
+    }
+
+    .strength-text {
+      font-size: 18px;
+      font-weight: 600;
+      color: #e8e4dc;
+      line-height: 1.6;
+    }
+
+    /* ─── EMAIL CAPTURE ─── */
+    .more-label {
+      font-size: 16px;
+      color: #7a7068;
+      line-height: 1.7;
+      max-width: 400px;
+      margin: 0 auto 24px;
+    }
+
+    .more-label strong {
+      color: #a09890;
+      font-weight: 600;
+    }
+
+    .email-row {
+      display: flex;
+      gap: 10px;
+      max-width: 380px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .email-input {
+      flex: 1;
+      background: #13131c;
+      border: 1px solid #22222e;
+      border-radius: 10px;
+      color: #e8e4dc;
+      font-size: 15px;
+      padding: 13px 16px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .email-input::placeholder { color: #3a3830; }
+    .email-input:focus { border-color: #3a3a50; }
+
+    .email-btn {
+      background: #2a2a3c;
+      color: #c8c4bc;
+      border: none;
+      border-radius: 10px;
+      padding: 13px 20px;
+      font-size: 14px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+
+    .email-btn:hover { background: #333348; }
+
+    .email-confirm {
+      display: none;
+      font-size: 14px;
+      color: #6a6060;
+      margin-top: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    /* ─── FOOTER ─── */
+    .footer {
+      margin-top: 72px;
+      font-size: 13px;
+      color: #3a3830;
+    }
+
+    .footer a {
+      color: #4a4840;
+      text-decoration: none;
+    }
+
+    .footer a:hover { color: #7a7468; }
+
+    /* ─── PLACEHOLDER CARD ─── */
+    .placeholder-card {
+      background: #13131c;
+      border: 1px solid #22222e;
+      border-radius: 14px;
+      padding: 32px 36px;
+      max-width: 520px;
+      width: 100%;
+      margin-top: 64px;
+      text-align: left;
+    }
+
+    .placeholder-label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #4a4460;
+      margin-bottom: 16px;
+    }
+
+    .placeholder-text {
+      font-size: 16px;
+      color: #c8c4bc;
+      line-height: 1.8;
+      font-style: italic;
+    }
+
+    .placeholder-attr {
+      margin-top: 18px;
+      font-size: 13px;
+      color: #4a4440;
+    }
+
+    .placeholder-strength {
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid #1e1e2a;
+      font-size: 17px;
+      font-weight: 600;
+      color: #e8e4dc;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="wordmark">Whew.</div>
+  <div class="breath">your people survived worse</div>
+
+  <!-- Intro -->
+  <p class="intro-label">Find your story</p>
+  <h1 class="intro-heading">Where did your people come from?</h1>
+  <p class="intro-sub">Tell us your origin. We'll show you one story from that line — a moment your ancestors endured, and how they made it through.</p>
+
+  <!-- Origin Form -->
+  <form class="origin-form" id="originForm" onsubmit="showStory(event)">
+    <div class="form-row">
+      <label class="form-label" for="region">Region</label>
+      <div class="select-wrap">
+        <select class="form-select" id="region" name="region" required>
+          <option value="" disabled selected>Select a region…</option>
+          <option value="west-texas">West Texas</option>
+          <option value="ireland">Ireland</option>
+          <option value="germany">Germany</option>
+          <option value="scandinavia">Scandinavia</option>
+          <option value="west-africa">West Africa</option>
+          <option value="eastern-europe">Eastern Europe</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <label class="form-label" for="familyName">Family name <span style="color:#3a3830;font-style:italic;text-transform:none;letter-spacing:0">(optional)</span></label>
+      <input class="form-input" type="text" id="familyName" name="familyName" placeholder="e.g. Watson, O'Brien, Schultz…" autocomplete="off" />
+    </div>
+    <button class="submit-btn" type="submit">Show me a story →</button>
+  </form>
+
+  <!-- West Texas Story — lineage thread layout -->
+  <div class="thread-container" id="westTexasStory">
+    <div class="lineage-thread">
+      <div class="thread-dot dot-top"></div>
+      <div class="thread-dot dot-mid"></div>
+      <div class="thread-dot dot-bottom"></div>
+    </div>
+
+    <div class="story-section">
+      <div class="section-tag">Where they were</div>
+      <p class="story-body">Rotan, Fisher County, Texas. October 1918.</p>
+      <p class="story-body">Your great-grandfather Enos Watson had been in Fisher County for twenty years. He came west from the older settlements, broke ground, survived the droughts, raised a family. His son Morris — nineteen years old — was studying to be a lawyer.</p>
+      <p class="story-place">Fisher County, West Texas · 1918</p>
+    </div>
+
+    <div class="story-section">
+      <div class="section-tag">What they faced</div>
+      <p class="story-body">In October 1918 the Spanish flu hit Rotan. It came on the train from Abilene. By the second week of October it had moved through three families on the east side of town. Morris was running a fever. Enos sent for the doctor — twenty miles away, already overrun. He waited.</p>
+      <p class="story-body">Morris's fever broke on its own. The way the flu either broke or it didn't.</p>
+      <p class="story-body">Rotan lost twenty-six people that fall. The Watson family was not among them.</p>
+    </div>
+
+    <div class="story-section">
+      <div class="section-tag">How they came through it</div>
+      <p class="story-body">Twenty years later, Morris Watson was practicing law in Fisher and Scurry County. The son of a farmer, the only lawyer for forty miles. That didn't happen by accident. It happened because Enos Watson held on when the rest of the world was falling apart, and Morris Watson survived a plague at nineteen and decided to build something anyway.</p>
+    </div>
+
+    <div class="strength-close">
+      <p class="strength-text">That persistence runs in your line.<br>It's running in you right now.</p>
+    </div>
+
+    <div class="more-label">
+      <strong>This is one story from your line. There are more.</strong><br>
+      Get a new story every morning — delivered to your inbox.
+    </div>
+
+    <div class="email-row">
+      <input class="email-input" type="email" id="emailInput1" placeholder="your@email.com" />
+      <button class="email-btn" onclick="captureEmail(event, 'emailInput1')">Send me more</button>
+    </div>
+    <p class="email-confirm" id="emailConfirm1">You're in. First story arrives tomorrow morning.</p>
+  </div>
+
+  <!-- Placeholder story for other regions -->
+  <div class="placeholder-card" id="placeholderStory" style="display:none;">
+    <div class="placeholder-label" id="placeholderLabel">Your story</div>
+    <p class="placeholder-text" id="placeholderText"></p>
+    <p class="placeholder-attr" id="placeholderAttr"></p>
+    <p class="placeholder-strength" id="placeholderStrength"></p>
+
+    <div style="margin-top:32px;">
+      <div class="more-label">
+        <strong>This is one story from your line. There are more.</strong><br>
+        Get a new story every morning — delivered to your inbox.
+      </div>
+      <div class="email-row" style="margin-top:16px;">
+        <input class="email-input" type="email" id="emailInput2" placeholder="your@email.com" />
+        <button class="email-btn" onclick="captureEmail(event, 'emailInput2')">Send me more</button>
+      </div>
+      <p class="email-confirm" id="emailConfirm2">You're in. First story arrives tomorrow morning.</p>
+    </div>
+  </div>
+
+  <div class="footer">
+    <a href="/privacy.html">Privacy Policy</a> &nbsp;·&nbsp; <a href="/index.html">← Back to Whew</a>
+  </div>
+
+  <script>
+    const PLACEHOLDER_STORIES = {
+      'ireland': {
+        label: 'County Galway · 1847',
+        text: 'The winter of 1847 came after two years of failed crops. The roads were full of families moving east toward the ports. Most of them had nothing. Your ancestor had a little more than nothing — enough to wait one more season before deciding to go. She waited. The blight came again. She went to the cousin in Connaught, then the ship west. She arrived with the clothes she was wearing and the memory of what green country looked like when it was healthy. She never went back. She built something anyway.',
+        attr: 'Your ancestor\'s world · County Galway, Ireland · 1847',
+        strength: 'That decision to keep moving — to not stop when the ground gave out — that\'s still in your blood. It\'s what brought you here.'
+      },
+      'germany': {
+        label: 'Rhine Valley · 1848',
+        text: 'The revolutions of 1848 swept through the German states and left wreckage in their wake. Your ancestor was a young farmer in the Rhine Valley when the promises of reform collapsed and the crackdowns began. He had a family, a piece of land, and a government that no longer felt like his. He made the decision that a generation of Germans made that year: leave now, or wait to see how bad it gets. He didn\'t wait. Three months later he was in Ohio, starting over from nothing on ground that didn\'t know his name.',
+        attr: 'Your ancestor\'s world · Rhine Valley, Germany · 1849',
+        strength: 'The willingness to leave everything behind and start from nothing — that\'s a specific kind of courage. You inherited it.'
+      },
+      'scandinavia': {
+        label: 'Northern Norway · 1880s',
+        text: 'The farm had been in the family for three generations. By 1882, it wasn\'t enough to feed the people living on it. Your ancestor was the second son — which meant no inheritance, no land, no future in the valley where he\'d grown up. He walked to the coast. He worked the docks until he had passage money. He crossed the Atlantic in steerage with forty-seven other Norwegians and arrived in Minnesota not knowing the language, not knowing the country, not knowing a soul. He found work the first week. He never looked back.',
+        attr: 'Your ancestor\'s world · Northern Norway · 1882',
+        strength: 'Starting over with nothing is not a failure. For your people, it was the move. That instinct to build from scratch lives in you.'
+      },
+      'west-africa': {
+        label: 'West Africa / American South · 1800s',
+        text: 'Your ancestors were brought to this country in chains. That is the beginning of the story — not the whole story. What came after was a hundred years of surviving a system designed to break every line of inheritance, every family bond, every claim to the past. Your people survived it. They passed names down in secret, kept stories alive through oral tradition when writing was forbidden, built community inside the margins of a country that didn\'t want them to have one. They endured. They built. They persisted through things that should have ended the line a dozen times over.',
+        attr: 'Your ancestors\' world · West Africa / American South',
+        strength: 'The fact that you exist is an act of defiance that spans two hundred years. That persistence is not an accident. It is your inheritance.'
+      },
+      'eastern-europe': {
+        label: 'Eastern Europe · Early 1900s',
+        text: 'By 1905, the village your ancestor came from had changed hands three times in a generation — Russian, then briefly independent, then Russian again. The pogroms had come through twice. Your ancestor was twenty-two years old and understood that staying was the slower kind of dying. She packed what she could carry. She walked to the rail station. She crossed half of Europe and an ocean on documents that were barely legal, in a language she didn\'t speak, toward a country she\'d only heard about second-hand. She got there. She stayed.',
+        attr: 'Your ancestor\'s world · Eastern Europe · 1906',
+        strength: 'She crossed the world on nothing but nerve. Whatever you\'re walking into, you come from someone who walked into worse.'
+      },
+      'other': {
+        label: 'Your line',
+        text: 'Every family line runs through at least one moment where survival was not guaranteed. A drought, a famine, a war, a crossing, a disease — something that should have ended the line. Your people faced their version of that moment. They made it through. The specific details are waiting to be found: in census records, ship manifests, county histories, the memories of the oldest people in your family. But the fact of their survival is already written in you. You are the evidence that they made it.',
+        attr: 'Your ancestors\' world',
+        strength: 'They came through something. That\'s why you\'re here. That persistence is in your blood right now.'
+      }
+    };
+
+    function showStory(e) {
+      e.preventDefault();
+      const region = document.getElementById('region').value;
+
+      // Hide both story containers first
+      document.getElementById('westTexasStory').classList.remove('visible');
+      document.getElementById('placeholderStory').style.display = 'none';
+
+      if (region === 'west-texas') {
+        const container = document.getElementById('westTexasStory');
+        container.classList.add('visible');
+        smoothScroll(container);
+      } else {
+        const data = PLACEHOLDER_STORIES[region] || PLACEHOLDER_STORIES['other'];
+        document.getElementById('placeholderLabel').textContent = data.label;
+        document.getElementById('placeholderText').textContent = data.text;
+        document.getElementById('placeholderAttr').textContent = '— ' + data.attr;
+        document.getElementById('placeholderStrength').textContent = data.strength;
+
+        const card = document.getElementById('placeholderStory');
+        card.style.display = 'block';
+        smoothScroll(card);
+      }
+    }
+
+    function smoothScroll(el) {
+      setTimeout(function() {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 80);
+    }
+
+    function captureEmail(e, inputId) {
+      e.preventDefault();
+      const input = document.getElementById(inputId);
+      const email = input.value.trim();
+      if (!email || !email.includes('@')) {
+        input.focus();
+        input.style.borderColor = '#5a3a3a';
+        setTimeout(function() { input.style.borderColor = ''; }, 1200);
+        return;
+      }
+      // In production: POST to your email capture endpoint
+      // For now: show confirmation
+      const confirmId = inputId.replace('emailInput', 'emailConfirm');
+      document.getElementById(confirmId).style.display = 'block';
+      input.parentElement.style.display = 'none';
+    }
+  </script>
+
+</body>
+</html>
